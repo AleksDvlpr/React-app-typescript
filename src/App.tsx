@@ -1,26 +1,82 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { Routes, Route } from 'react-router-dom';
+import LoginForm from './components/auth/LoginForm';
+import EmployeeCreate from './components/employees/EmployeeCreate';
+import EmployeeDetail from './components/employees/EmployeeDetail';
+import EmployeeList from './components/employees/EmployeeList';
+import LogOut from './components/auth/LogOut';
+import { Navigate } from 'react-router-dom';
+import NotFound from './components/404';
+import React from "react";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+    loggedIn(): number {
+        return Number(localStorage.getItem('loggedIn'));
+    }
+    
+    render() {
+        type Props = {
+            children?: React.ReactNode
+        };
+        /*
+         * Врапперы использую для защиты роутов если юзер не авторизован.
+         * В 5-й версии react-router-dom можно было использовать компонент Redirect,
+         * но в 6-й убрали его. Приходится юзать врапперы
+         * */
+        const LogInWrapper = ({children}: Props) => {
+            return this.loggedIn() ? <div><Navigate to="/employee" replace/></div> : <div>{children}</div>;
+        };
+
+        const EmployeeWrapper = ({children}: Props) => {
+            return !this.loggedIn() ? <div><Navigate to="/" replace/></div> : <div>{children}</div>;
+        };
+        
+        return (
+            <div className="App">
+                <LogOut/>
+
+                <Routes>
+                    <Route
+                        path="/"
+                        element={
+                            <LogInWrapper>
+                                <LoginForm/>
+                            </LogInWrapper>
+                        }
+                    />
+
+                    <Route
+                        path="/employee"
+                        element={
+                            <EmployeeWrapper>
+                                <EmployeeList/>
+                            </EmployeeWrapper>
+                        }
+                    />
+
+                    <Route
+                        path="/employee/:id"
+                        element={
+                            <EmployeeWrapper>
+                                <EmployeeDetail/>
+                            </EmployeeWrapper>
+                        }
+                    />
+
+                    <Route
+                        path="/employee/create"
+                        element={
+                            <EmployeeWrapper>
+                                <EmployeeCreate/>
+                            </EmployeeWrapper>
+                        }
+                    />
+
+                    <Route path="*" element={<NotFound/>}/>
+                </Routes>
+            </div>
+        );
+    }
 }
 
 export default App;
