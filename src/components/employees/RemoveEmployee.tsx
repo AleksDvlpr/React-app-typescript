@@ -9,7 +9,7 @@ interface Props {
 const RemoveEmployee = ({ id }: Props) => {
   const dispatch = useDispatch();
 
-  const removeHandler = (event: any) => {
+  const removeHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     dispatch(removeEmployee(id));
   };

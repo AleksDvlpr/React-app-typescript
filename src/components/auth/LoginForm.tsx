@@ -3,10 +3,10 @@ import './LoginForm.css';
 import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
-  const [login, setLogin] = useState(null);
-  const [password, setPassword] = useState(null);
-  const [loginError, setLoginError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
+  const [login, setLogin] = useState<string|null>(null);
+  const [password, setPassword] = useState<string|null>(null);
+  const [loginError, setLoginError] = useState<boolean>(false);
+  const [passwordError, setPasswordError] = useState<boolean>(false);
 
   const credentials = {
     login: 'admin',
@@ -17,7 +17,7 @@ const LoginForm = () => {
 
   let authAllowed = true;
 
-  const onFormSubmit = (event: any) => {
+  const onFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (login !== credentials.login) {
@@ -35,12 +35,12 @@ const LoginForm = () => {
     }
   };
 
-  const onLoginChange = (event: any) => {
+  const onLoginChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLoginError(false);
     setLogin(event.target.value);
   };
 
-  const onPasswordChange = (event: any) => {
+  const onPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPasswordError(false);
     setPassword(event.target.value);
   };

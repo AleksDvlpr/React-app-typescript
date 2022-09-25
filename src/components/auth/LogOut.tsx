@@ -6,7 +6,7 @@ const LogOut = () => {
   const navigate = useNavigate();
   const loggedIn = Number(localStorage.getItem('loggedIn'));
 
-  const logOut = (event: any) => {
+  const logOut = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     localStorage.setItem('loggedIn', String(0));
     navigate('/', { replace: true });
